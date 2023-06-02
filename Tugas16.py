@@ -24,7 +24,54 @@ class TestLogin(unittest.TestCase):
 
         # validasi
         response_data = driver.find_element(By.CLASS_NAME,"title").text
-        self.assertIn('PRODUCTS', response_data)
+        self.assertIn('Products', response_data)
+
+    def tearDown(self):
+        self.browser.close()
+
+
+    def setUp(self):
+        self.browser = webdriver.Chrome()
+
+    def test_a_fail_login(self):
+        # steps
+        driver = self.browser #buka web browser
+        driver.get("https://www.saucedemo.com/") # buka situs
+        time.sleep(3)
+        driver.find_element(By.ID,"user-name").send_keys("standard_user") # isi email
+        time.sleep(1)
+        driver.find_element(By.ID,"password").send_keys("qwerty") # isi password
+        time.sleep(1)
+        driver.find_element(By.ID, "login-button").click()
+        time.sleep(1)
+
+        # validasi
+        button = driver.find_element(By.CLASS_NAME,"error-button")
+        button_class = button.get_attribute('class')
+        self.assertIn('error-button', button_class)
+
+    def tearDown(self):
+        self.browser.close()
+
+    def setUp(self):
+        self.browser = webdriver.Chrome()
+
+    def test_a_fail_login_blank_input(self):
+        # steps
+        driver = self.browser #buka web browser
+        driver.get("https://www.saucedemo.com/") # buka situs
+        time.sleep(3)
+        driver.find_element(By.ID,"user-name").send_keys("") # isi email
+        time.sleep(1)
+        driver.find_element(By.ID,"password").send_keys("") # isi password
+        time.sleep(1)
+        driver.find_element(By.ID, "login-button").click()
+        time.sleep(1)
+
+        # validasi
+        button = driver.find_element(By.CLASS_NAME,"error-button")
+        button_class = button.get_attribute('class')
+        self.assertIn('error-button', button_class)
 
     def tearDown(self):
         self.browser.close()
